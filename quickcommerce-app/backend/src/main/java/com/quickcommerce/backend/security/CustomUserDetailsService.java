@@ -49,6 +49,7 @@ public class CustomUserDetailsService implements UserDetailsService {
             this.user = user;
         }
         
+        // This is the property referenced by @AuthenticationPrincipal(expression = "user")
         public User getUser() {
             return user;
         }

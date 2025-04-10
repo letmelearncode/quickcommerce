@@ -10,6 +10,6 @@ import java.lang.annotation.*;
 @Target({ElementType.PARAMETER, ElementType.TYPE})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@AuthenticationPrincipal(expression = "#this == 'anonymousUser' ? null : ((com.quickcommerce.backend.security.CustomUserDetailsService$UserPrincipal) #this).getUser()")
+@AuthenticationPrincipal(expression = "user")
 public @interface CurrentUser {
 } 
