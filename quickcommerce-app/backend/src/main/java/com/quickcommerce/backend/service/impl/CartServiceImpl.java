@@ -14,6 +14,7 @@ import com.quickcommerce.backend.repository.CartRepository;
 import com.quickcommerce.backend.repository.ProductRepository;
 import com.quickcommerce.backend.service.CartService;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +26,7 @@ import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class CartServiceImpl implements CartService {
 
     private final CartRepository cartRepository;
@@ -34,7 +36,9 @@ public class CartServiceImpl implements CartService {
     @Override
     @Transactional
     public CartDTO getCart(User user, String sessionId) {
+        log.info("Getting cart for user: {}, sessionId: {}", user, sessionId);
         Cart cart = getOrCreateCart(user, sessionId);
+        log.info("Retrieved cart: {}", cart);
         return mapCartToDTO(cart);
     }
 
@@ -74,15 +78,41 @@ public class CartServiceImpl implements CartService {
     @Override
     @Transactional
     public CartDTO updateCartItem(User user, String sessionId, Long itemId, UpdateCartItemRequest request) {
+        log.info("Updating cart item: itemId={}, user={}, sessionId={}, quantity={}", 
+                itemId, user, sessionId, request.getQuantity());
+        
         Cart cart = getOrCreateCart(user, sessionId);
+        log.info("Retrieved cart: id={}, userId={}, sessionId={}, itemCount={}", 
+                cart.getId(), cart.getUser() != null ? cart.getUser().getId() : null, 
+                cart.getSessionId(), cart.getItems().size());
         
         // Find cart item - improved query to ensure item belongs to this cart
-        CartItem item = cartItemRepository.findByIdAndCart(itemId, cart)
-                .orElseThrow(() -> new NotFoundException("Cart item not found with ID: " + itemId + " in your cart"));
+        Optional<CartItem> itemOpt = cartItemRepository.findByIdAndCart(itemId, cart);
+        
+        if (!itemOpt.isPresent()) {
+            // Debug why the item wasn't found
+            log.error("Cart item not found. itemId={}, cartId={}", itemId, cart.getId());
+            
+            // Get all items for this cart from DB for debug purposes
+            List<CartItem> allCartItems = cartItemRepository.findAll().stream()
+                .filter(item -> item.getCart().getId().equals(cart.getId()))
+                .collect(Collectors.toList());
+            
+            log.info("All items for cart {}: {}", cart.getId(), 
+                    allCartItems.stream()
+                    .map(item -> String.format("ID=%d, Product=%d", 
+                            item.getId(), item.getProduct().getId()))
+                    .collect(Collectors.joining(", ")));
+            
+            throw new NotFoundException("Cart item not found with ID: " + itemId + " in your cart");
+        }
+        
+        CartItem item = itemOpt.get();
         
         // Update quantity
         item.setQuantity(request.getQuantity());
         cartItemRepository.save(item);
+        log.info("Updated cart item quantity: itemId={}, newQuantity={}", item.getId(), item.getQuantity());
         
         return mapCartToDTO(cart);
     }
@@ -168,31 +198,50 @@ public class CartServiceImpl implements CartService {
     // Helper methods
     
     private Cart getOrCreateCart(User user, String sessionId) {
-        System.out.println("getOrCreateCart called with user: " + user + " and sessionId: " + sessionId);
+        log.info("getOrCreateCart called with user: {}, sessionId: {}", 
+                user != null ? user.getId() : "null", sessionId);
+                
         // Prioritize authenticated users
         if (user != null) {
             // For logged-in users, search or create by user ID, ignoring session ID
-            return cartRepository.findByUser(user)
-                    .orElseGet(() -> {
-                        Cart newCart = new Cart();
-                        newCart.setUser(user);
-                        // Don't set sessionId for authenticated users
-                        return cartRepository.save(newCart);
-                    });
+            Optional<Cart> userCartOpt = cartRepository.findByUser(user);
+            
+            if (userCartOpt.isPresent()) {
+                log.info("Found existing cart for user: {}, cartId: {}", 
+                        user.getId(), userCartOpt.get().getId());
+                return userCartOpt.get();
+            } else {
+                Cart newCart = new Cart();
+                newCart.setUser(user);
+                // Don't set sessionId for authenticated users
+                Cart savedCart = cartRepository.save(newCart);
+                log.info("Created new cart for user: {}, cartId: {}", 
+                        user.getId(), savedCart.getId());
+                return savedCart;
+            }
         } 
         // For guest users, use session ID
         else if (sessionId != null) {
-            return cartRepository.findBySessionId(sessionId)
-                    .orElseGet(() -> {
-                        Cart newCart = new Cart();
-                        newCart.setSessionId(sessionId);
-                        // Explicitly set user to null for guest carts
-                        newCart.setUser(null);
-                        return cartRepository.save(newCart);
-                    });
+            Optional<Cart> guestCartOpt = cartRepository.findBySessionId(sessionId);
+            
+            if (guestCartOpt.isPresent()) {
+                log.info("Found existing cart for sessionId: {}, cartId: {}", 
+                        sessionId, guestCartOpt.get().getId());
+                return guestCartOpt.get();
+            } else {
+                Cart newCart = new Cart();
+                newCart.setSessionId(sessionId);
+                // Explicitly set user to null for guest carts
+                newCart.setUser(null);
+                Cart savedCart = cartRepository.save(newCart);
+                log.info("Created new cart for sessionId: {}, cartId: {}", 
+                        sessionId, savedCart.getId());
+                return savedCart;
+            }
         } 
         // Fallback for edge cases - should never happen in normal operation
         else {
+            log.warn("Both user and sessionId are null, creating transient cart");
             // Create an empty transient cart (not saved to DB)
             Cart transientCart = new Cart();
             transientCart.setUser(null);
