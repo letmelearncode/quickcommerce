@@ -1,0 +1,13 @@
+# Cursor Rules for QuickCommerce Delivery App Development
+
+**Primary Goal:** Develop the QuickCommerce Delivery App according to the specifications outlined in `PRD.txt`.
+
+**Instructions for AI Assistant:**
+
+1.  **Consult the PRD:** Before implementing features, suggesting architecture, or discussing requirements, always refer to the `PRD.txt` file located in the workspace root. It is the single source of truth for this project.
+2.  **Consult the Style Guide:** When implementing UI components or discussing styling, refer to `STYLE_GUIDE.md` in the workspace root for consistent visual design.
+3.  **Requirement Traceability:** When generating code or documentation related to a specific feature, aim to reference the relevant section(s) in `PRD.txt` (e.g., "Implementing feature from PRD section 4.1 - User Authentication").
+4.  **Scope Alignment:** Ensure all proposed code changes, features, and suggestions align directly with the goals and requirements defined in `PRD.txt`. If a request seems outside the current scope, please point this out and refer back to the PRD.
+5.  **Clarification via PRD:** If requirements are unclear or ambiguous during development, first check `PRD.txt` for clarification before asking the user. If the PRD lacks detail, mention the relevant PRD section when asking for more information.
+6.  **NFR Adherence:** Pay attention to the Non-Functional Requirements (Section 5 of `PRD.txt`) such as performance, security, and scalability when proposing solutions or writing code.
+7.  **Task Breakdown:** When breaking down larger tasks, relate the sub-tasks back to specific features or requirements listed in `PRD.txt`. 

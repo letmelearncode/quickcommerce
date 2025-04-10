@@ -1,0 +1,220 @@
+# Product Requirements Document: QuickCommerce Delivery App
+
+## 1. Introduction & Overview
+
+This document outlines the requirements for the QuickCommerce Delivery App, a **web application platform** designed to provide users with a fast and convenient way to order everyday items (groceries, essentials, snacks, etc.) for rapid delivery to their specified location. The platform will consist of a customer-facing web app, a delivery partner web app, and an admin panel. It will connect customers with local stores/warehouses and a network of delivery partners, offering real-time tracking and estimated time of arrival (ETA) for all orders.
+
+## 2. Goals
+
+*   **Provide Ultra-Fast Delivery:** Deliver items to customers within a target timeframe (e.g., 15-60 minutes) of order placement within defined service areas.
+*   **Offer Convenience:** Allow users to easily browse, select, and order items from their **web browser**.
+*   **Ensure Reliability:** Provide accurate real-time tracking, reliable ETAs, and consistent service quality.
+*   **Build a Scalable Platform:** Create a system capable of handling a growing user base, expanding product catalog, and increasing order volume.
+*   **Generate Revenue:** Establish a sustainable business model through item markups, delivery fees, and potential subscription models.
+*   **Achieve High Customer Satisfaction:** Deliver a seamless, **intuitive, and visually appealing (ultra-modern, sleek, minimalistic)** user experience for customers, delivery partners, and administrators.
+
+## 3. Target Audience
+
+*   **Customers:** Busy professionals, students, families, individuals seeking convenience, last-minute shoppers, people without easy access to transport.
+*   **Delivery Partners:** Individuals seeking flexible work opportunities (gig workers) with their own vehicles (bikes, scooters, cars).
+*   **Administrators:** Internal team responsible for managing operations, inventory, users, and the platform itself.
+
+## 4. Key Features
+
+### 4.1 Customer Facing App (**Web Application**)
+
+*   **User Authentication:**
+    *   Sign up/Login via Email/Password.
+    *   Social Login (Google, **potentially others like Facebook/GitHub - Apple Login less common for non-Apple platforms**).
+    *   Password Reset.
+    *   Profile Management (Name, Phone, Profile Picture).
+*   **Product Discovery & Browsing:**
+    *   Homepage with featured items, promotions, categories.
+    *   Category browsing.
+    *   Search functionality with filters (price, brand, relevance) and auto-suggestions.
+    *   View product details (images, description, price, nutritional info if applicable, stock availability).
+    *   View product reviews and ratings.
+*   **Shopping Cart:**
+    *   Add/Remove items.
+    *   Adjust item quantity.
+    *   View cart summary (subtotal, estimated fees/taxes).
+*   **Address Management:**
+    *   Add multiple delivery addresses (Home, Work, etc.).
+    *   Set default address.
+    *   Edit/Delete addresses.
+    *   Address validation/suggestion using mapping services.
+*   **Checkout & Payment:**
+    *   Order summary review (items, address, total cost including delivery fee & taxes).
+    *   Secure payment integration (Stripe, Braintree, PayPal, Apple Pay, Google Pay).
+    *   Add/Save payment methods.
+    *   Apply promo codes/discounts.
+    *   Order confirmation screen.
+*   **Order Management & Tracking:**
+    *   View order history (past and current orders).
+    *   View order details (items, cost, status, delivery partner info).
+    *   Real-time map-based tracking of delivery partner's location.
+    *   Dynamic ETA updates based on traffic and delivery progress.
+    *   Option to reorder previous purchases easily.
+*   **Notifications:**
+    *   **Web Push notifications / In-browser alerts / Email notifications** for: Order confirmation, Payment success/failure, Delivery partner assigned, Partner arriving soon, Order delivered, Special offers/promotions.
+    *   In-app notification center.
+*   **Ratings & Reviews:**
+    *   Rate the delivery experience (partner, speed, overall).
+    *   Rate purchased products.
+*   **Customer Support:**
+    *   In-app chat support.
+    *   Help Center/FAQ section.
+    *   Easy access to report order issues.
+
+### 4.2 Delivery Partner App (**Web Application**)
+
+*   **Registration & Onboarding:**
+    *   Sign up process including identity verification and background check integration.
+    *   Profile setup (vehicle details, bank information for payouts).
+*   **Availability & Orders:**
+    *   Toggle availability status (Online/Offline).
+    *   Receive notifications for new delivery requests in their zone.
+    *   View order details (pickup location, drop-off location, estimated earnings, item list summary).
+    *   Accept/Reject delivery requests within a time limit.
+*   **Delivery Execution:**
+    *   **Link to external navigation app (e.g., Google Maps, Waze)** for pickup location (store/warehouse).
+    *   Order pickup confirmation (e.g., scan QR code **via webcam/phone camera if available, or manual code entry**).
+    *   **Link to external navigation app** for customer's delivery address.
+    *   Route optimization suggestions.
+    *   **Web-based** communication with customer (masked numbers/chat).
+    *   Proof of delivery (**photo upload**, signature capture - optional, potentially challenging on web).
+    *   Order completion confirmation.
+*   **Earnings & Performance:**
+    *   Dashboard showing completed deliveries, total earnings, tips.
+    *   Weekly/Daily earnings summary.
+    *   View ratings and feedback from customers.
+*   **Support:**
+    *   Access to dedicated support for delivery partners.
+    *   FAQ section specific to partners.
+
+### 4.3 Admin Panel (Web Application)
+
+*   **Dashboard:**
+    *   Overview of key metrics: Total Orders, Total Revenue, Active Users, Active Delivery Partners, Average Delivery Time, Order Status distribution.
+    *   Real-time activity feed.
+*   **User Management:**
+    *   View/Search/Filter customer and delivery partner lists.
+    *   Manage user profiles (verify, suspend, delete accounts).
+    *   View order history per user.
+    *   Manage delivery partner verification and documentation.
+*   **Product & Inventory Management:**
+    *   Manage product categories.
+    *   Add/Edit/Delete products (details, images, pricing).
+    *   Manage stock levels (manual updates or integration with store/warehouse systems).
+    *   Control product visibility and availability.
+*   **Order Management:**
+    *   View all current and past orders with detailed status.
+    *   Search/Filter orders (by status, user, date, location).
+    *   Manually assign orders to delivery partners if needed (exception handling).
+    *   Handle order cancellations and refunds.
+*   **Pricing & Promotions:**
+    *   Set delivery fees (potentially dynamic based on distance/demand).
+    *   Create and manage promo codes and discounts.
+    *   Configure service fees or item markups.
+*   **Zone Management:**
+    *   Define operational delivery zones using map interface.
+    *   Manage settings per zone (e.g., delivery fees, operating hours).
+*   **Delivery Partner Management:**
+    *   Monitor delivery partner locations and status (on map).
+    *   Manage payouts and earnings reports.
+    *   Communicate with partners via announcements or direct messages.
+*   **Reporting & Analytics:**
+    *   Generate reports on sales, customers, deliveries, product performance.
+    *   Visualize data through charts and graphs.
+    *   Export data for further analysis.
+*   **Support Management:**
+    *   Manage support tickets/requests from customers and partners.
+    *   Assign tickets to support staff.
+*   **Settings:**
+    *   Configure application settings (notification templates, API keys, payment gateway settings).
+    *   Manage admin user roles and permissions.
+*   **Location Services:**
+    *   Accurate use of **browser Geolocation API** for tracking (requires user permission).
+    *   Clear communication to users about location data usage and permissions.
+
+## 5. Non-Functional Requirements
+
+*   **Performance:**
+    *   App load time < 3 seconds.
+    *   Real-time tracking updates latency < 5 seconds.
+    *   API response times < 500ms under average load.
+    *   Support X concurrent users and Y orders per hour (Define specific targets based on expected scale).
+*   **Scalability:**
+    *   Horizontally scalable architecture (cloud-based preferred: AWS/GCP/Azure).
+    *   Database designed to handle growth in users, products, and orders.
+    *   Load balancing for high traffic.
+*   **Reliability:**
+    *   Target uptime: 99.9%.
+    *   Robust error handling and logging.
+    *   Accurate ETA calculations, adapting to real-time conditions.
+    *   Data backups and disaster recovery plan.
+*   **Usability:**
+    *   **Achieve an ultra-modern, sleek, and minimalistic design aesthetic.**
+    *   Intuitive and clean User Interface (UI) **prioritizing ease of use and clarity.**
+    *   Minimal steps required to complete key actions (e.g., placing an order).
+    *   **Smooth and subtle animations/transitions** to enhance user experience without being distracting.
+    *   Responsive design for various screen sizes (desktop, tablet, mobile web).
+    *   Accessibility considerations (WCAG compliance).
+*   **Security:**
+    *   Secure authentication and session management.
+    *   Encryption of sensitive data (passwords, payment info) at rest and in transit (HTTPS).
+    *   Protection against common web/mobile vulnerabilities (OWASP Top 10).
+    *   Role-based access control for Admin Panel.
+    *   Secure handling of API keys and credentials.
+    *   Compliance with relevant data privacy laws (GDPR, CCPA, etc.).
+*   **Maintainability:**
+    *   Well-documented code.
+    *   Modular design.
+    *   Consistent coding standards.
+    *   Automated testing (Unit, Integration, E2E).
+    *   CI/CD pipeline for automated builds and deployments.
+
+## 6. Technology Stack (**Finalized**)
+
+*   **Frontend Web Apps (Customer, Partner, Admin):** **React**
+*   **Backend:** **Node.js** with **Express.js**
+*   **Database:** **PostgreSQL** (with **PostGIS** extension for location data)
+*   **Mapping & Geolocation:** **Google Maps Platform (specifically Google Maps JavaScript API)**
+*   **Payment Gateway:** **Stripe**
+*   **Web Push Notifications:** **Firebase Cloud Messaging (FCM) for Web**
+*   **Email Notifications:** **SendGrid**
+*   **Cloud Hosting:** **AWS / Google Cloud / Microsoft Azure** (Specific services TBD)
+*   **Search:** **Elasticsearch / Algolia** (Decision deferred)
+*   **Caching:** **Redis**
+*   **Analytics:** **Google Analytics / Mixpanel / Amplitude** (Decision deferred)
+
+## 7. Success Metrics
+
+*   **User Acquisition:** Number of registered users (Customers & Partners), Download rate, Sign-up conversion rate.
+*   **Engagement:** Daily Active Users (DAU), Monthly Active Users (MAU), Session duration, Order frequency.
+*   **Operational Efficiency:** Average delivery time, On-time delivery rate, Order fulfillment rate, Delivery partner utilization rate.
+*   **Financial:** Gross Merchandise Volume (GMV), Revenue, Average Order Value (AOV), Customer Acquisition Cost (CAC), Customer Lifetime Value (CLTV).
+*   **Satisfaction:** Customer Satisfaction Score (CSAT), Net Promoter Score (NPS), App Store ratings/reviews, Delivery partner satisfaction ratings.
+*   **Retention:** Customer retention rate, Delivery partner churn rate.
+
+## 8. Future Considerations / Roadmap (Post-MVP)
+
+*   **Scheduled Deliveries:** Allow users to schedule orders in advance.
+*   **Subscription Service:** Offer a premium subscription for benefits like free delivery or exclusive discounts.
+*   **Loyalty Program:** Reward frequent customers.
+*   **Expanded Product Categories:** Include pharmaceuticals (if regulations allow), alcohol, specialty items.
+*   **Multi-Store/Warehouse Support:** Integrate with multiple fulfillment centers or partner stores.
+*   **Substitution Options:** Allow users to specify preferences if items are out of stock.
+*   **Group Orders:** Allow multiple users to contribute to a single order.
+*   **Enhanced AI/ML:** Improved ETA prediction, personalized product recommendations, dynamic pricing optimization.
+*   **In-app Advertising:** Allow brands to promote products within the app.
+
+## 9. Open Issues
+
+*   Final decision on specific technology stack components. **(Most decided, Search/Analytics deferred)**
+*   Detailed definition of delivery zones and initial launch city/area.
+*   Specific pricing strategy (delivery fees, service fees, markup percentages).
+*   Partnership agreements with initial stores/suppliers.
+*   Detailed workflow for handling out-of-stock items during fulfillment.
+*   Specific background check provider for delivery partners.
+*   Detailed customer support workflow and tooling. 

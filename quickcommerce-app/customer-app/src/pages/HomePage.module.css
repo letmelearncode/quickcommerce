@@ -1,0 +1,83 @@
+.homePageContainer {
+    padding: 1rem;
+  }
+  
+  .section {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    text-align: left;
+  }
+  
+  .section h3 {
+    margin-bottom: 1rem;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 0.5rem;
+  }
+  
+  /* Category List Styles */
+  .categoryList {
+    list-style: none;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  
+  .categoryList li span {
+    display: inline-block;
+    padding: 0.4rem 0.8rem;
+    background-color: #e9ecef;
+    border-radius: 15px; /* Pill shape */
+    font-size: 0.9rem;
+    cursor: pointer; /* Indicate clickable later */
+    transition: background-color 0.2s;
+  }
+  
+  .categoryList li span:hover {
+    background-color: #ced4da;
+  }
+  
+  /* Product List Styles */
+  .productList {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); /* Responsive grid */
+    gap: 1.5rem;
+  }
+  
+  .productCard {
+    border: 1px solid #eee;
+    border-radius: 8px;
+    padding: 1rem;
+    text-align: center;
+    background-color: #fff;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    transition: box-shadow 0.2s;
+  }
+  
+  .productCard:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .productImage {
+    max-width: 100%;
+    height: 120px; /* Fixed height */
+    object-fit: contain; /* Scale image while preserving aspect ratio */
+    margin-bottom: 0.75rem;
+  }
+  
+  .productCard h4 {
+    margin-top: 0.5rem;
+    margin-bottom: 0.25rem;
+    font-size: 1rem;
+    font-weight: 600; /* Slightly bolder */
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  
+  .productPrice {
+    font-size: 1.1rem;
+    font-weight: bold;
+    color: #333;
+    margin-top: 0.5rem;
+  }
