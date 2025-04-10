@@ -105,13 +105,13 @@ This task list is derived from the features outlined in `PRD.txt`. Check items o
 
 ### Shopping Cart
 - [x] [UI] Implement Add to Cart functionality
-- [ ] [UI] Implement Remove from Cart functionality
-- [ ] [UI] Implement Adjust Item Quantity in Cart
-- [ ] [UI] Implement Cart Summary view
-- [ ] [UI] Implement Cart state management (e.g., Context API, Redux)
-- [ ] [Backend] Define Cart/CartItem entities/models (or handle transiently)
-- [ ] [Backend] Implement API endpoints for cart operations (add, remove, update, view)
-- [ ] [Backend] Implement Service logic for cart management
+- [x] [UI] Implement Remove from Cart functionality
+- [x] [UI] Implement Adjust Item Quantity in Cart
+- [x] [UI] Implement Cart Summary view
+- [x] [UI] Implement Cart state management (e.g., Context API, Redux)
+- [x] [Backend] Define Cart/CartItem entities/models (or handle transiently)
+- [x] [Backend] Implement API endpoints for cart operations (add, remove, update, view)
+- [x] [Backend] Implement Service logic for cart management
 
 ### Address Management
 - [ ] [UI] Implement Add Delivery Address form UI
@@ -150,19 +150,19 @@ This task list is derived from the features outlined in `PRD.txt`. Check items o
 - [ ] [Backend] Implement Order Controller endpoints (e.g., place order)
 
 ### Order Management & Tracking
-- [ ] [UI] Implement Order History screen (Past & Current) UI
-- [ ] [UI] Implement Order Detail view UI
+- [x] [UI] Implement Order History screen (Past & Current) UI
+- [x] [UI] Implement Order Detail view UI
 - **Real-time Map-based Delivery Tracking**
-    - [ ] [UI] Integrate Google Maps JavaScript API library
-    - [ ] [UI] Display delivery partner marker on map
-    - [ ] [UI] Subscribe to live location updates (WebSockets/SSE)
-    - [ ] [UI] Update marker position based on received data
+    - [x] [UI] Integrate Google Maps JavaScript API library
+    - [x] [UI] Display delivery partner marker on map
+    - [x] [UI] Subscribe to live location updates (WebSockets/SSE)
+    - [x] [UI] Update marker position based on received data
     - [ ] [Backend] Define mechanism for tracking partner location (e.g., separate endpoint or WebSocket connection)
     - [ ] [Backend] Implement WebSocket/SSE endpoint to broadcast location updates to relevant customers
-- [ ] [UI] Implement ETA display and dynamic updates
+- [x] [UI] Implement ETA display and dynamic updates
 - [ ] [Backend] Implement ETA calculation logic (potentially involving external map APIs)
 - [ ] [Backend] Include ETA in location update broadcasts
-- [ ] [UI] Implement 'Reorder' button/flow UI
+- [x] [UI] Implement 'Reorder' button/flow UI
 - [ ] [Backend] Implement endpoint/logic for reordering
 
 ### Notifications

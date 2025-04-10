@@ -12,6 +12,9 @@ import SearchBar from './components/SearchBar'; // Import the SearchBar componen
 import SearchResultsPage from './pages/SearchResultsPage'; // Import SearchResultsPage
 import ProductDetailPage from './pages/ProductDetailPage'; // Import ProductDetailPage
 import CartPage from './pages/CartPage'; // Import the new CartPage
+import OrderHistoryPage from './pages/OrderHistoryPage'; // Import the new OrderHistoryPage
+import OrderDetailPage from './pages/OrderDetailPage'; // Import the new OrderDetailPage
+import OrderTrackingPage from './pages/OrderTrackingPage'; // Import the new OrderTrackingPage
 import './App.css';
 
 // Make the Logo smaller
@@ -195,6 +198,32 @@ function App() {
               element={
                 <ProtectedRoute>
                   <ProfilePage />
+                </ProtectedRoute>
+              }
+            />
+            
+            {/* Order Management Routes */}
+            <Route 
+              path="/orders" 
+              element={
+                <ProtectedRoute>
+                  <OrderHistoryPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route 
+              path="/orders/:orderId" 
+              element={
+                <ProtectedRoute>
+                  <OrderDetailPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route 
+              path="/orders/:orderId/tracking" 
+              element={
+                <ProtectedRoute>
+                  <OrderTrackingPage />
                 </ProtectedRoute>
               }
             />
