@@ -76,11 +76,9 @@ public class CartServiceImpl implements CartService {
     public CartDTO updateCartItem(User user, String sessionId, Long itemId, UpdateCartItemRequest request) {
         Cart cart = getOrCreateCart(user, sessionId);
         
-        // Find cart item
-        CartItem item = cart.getItems().stream()
-                .filter(i -> i.getId().equals(itemId))
-                .findFirst()
-                .orElseThrow(() -> new NotFoundException("Cart item not found with ID: " + itemId));
+        // Find cart item - improved query to ensure item belongs to this cart
+        CartItem item = cartItemRepository.findByIdAndCart(itemId, cart)
+                .orElseThrow(() -> new NotFoundException("Cart item not found with ID: " + itemId + " in your cart"));
         
         // Update quantity
         item.setQuantity(request.getQuantity());
@@ -94,11 +92,9 @@ public class CartServiceImpl implements CartService {
     public CartDTO removeFromCart(User user, String sessionId, Long itemId) {
         Cart cart = getOrCreateCart(user, sessionId);
         
-        // Find cart item
-        CartItem item = cart.getItems().stream()
-                .filter(i -> i.getId().equals(itemId))
-                .findFirst()
-                .orElseThrow(() -> new NotFoundException("Cart item not found with ID: " + itemId));
+        // Find cart item using the repository to ensure it belongs to this cart
+        CartItem item = cartItemRepository.findByIdAndCart(itemId, cart)
+                .orElseThrow(() -> new NotFoundException("Cart item not found with ID: " + itemId + " in your cart"));
         
         // Remove item
         cart.removeItem(item);
