@@ -93,11 +93,15 @@ public class Order {
     }
 
     public enum OrderStatus {
-        PENDING,
-        PROCESSING,
-        IN_TRANSIT,
-        DELIVERED,
-        CANCELLED
+        PENDING,                // Initial state when order is created
+        PAYMENT_PENDING,        // Payment initiated but not confirmed
+        PAYMENT_FAILED,         // Payment attempt failed
+        PAYMENT_DECLINED,       // Payment was declined by bank/payment provider
+        PROCESSING,            // Payment successful, order being prepared
+        IN_TRANSIT,           // Order picked up by delivery partner
+        DELIVERED,            // Order successfully delivered
+        CANCELLED,            // Order cancelled by user/admin
+        REFUNDED              // Order refunded after cancellation
     }
 
     public void addItem(OrderItem item) {
@@ -124,6 +128,7 @@ public class Order {
         switch (newStatus) {
             case PROCESSING:
                 this.processedDate = LocalDateTime.now();
+                this.isPaid = true;  // Mark as paid when moving to processing
                 break;
             case IN_TRANSIT:
                 this.shippedDate = LocalDateTime.now();
@@ -132,6 +137,7 @@ public class Order {
                 this.deliveredDate = LocalDateTime.now();
                 break;
             case CANCELLED:
+            case REFUNDED:
                 this.cancelledDate = LocalDateTime.now();
                 break;
             default:

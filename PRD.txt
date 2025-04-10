@@ -355,3 +355,173 @@ As the QuickCommerce platform grows, several technical challenges will emerge th
    * Flash sale infrastructure
    * Real-time data distribution
    * Comprehensive caching strategy 
+
+### Domain Architecture & Lifecycle Management
+
+#### 1. Order Domain
+*   **States & Transitions:**
+    - PENDING → Initial order creation
+    - PAYMENT_PENDING → Payment initiated
+    - PAYMENT_FAILED → System payment failure
+    - PAYMENT_DECLINED → Bank/Provider declined
+    - PROCESSING → Payment successful
+    - IN_TRANSIT → Shipping started
+    - DELIVERED → Order completed
+    - CANCELLED → Order cancelled
+    - REFUNDED → Payment returned
+
+*   **Responsibilities:**
+    - Order creation and validation
+    - Price calculation (subtotal, tax, shipping, discounts)
+    - Status management and transitions
+    - Order history and tracking
+    - Returns and cancellation processing
+    - Order analytics and reporting
+
+#### 2. Payment Domain
+*   **States:**
+    - INITIATED → Payment process started
+    - PROCESSING → Payment being processed
+    - AUTHORIZED → Payment pre-authorized
+    - CAPTURED → Payment completed
+    - FAILED → Payment unsuccessful
+    - REFUNDED → Payment returned
+    - PARTIALLY_REFUNDED → Partial return
+
+*   **Responsibilities:**
+    - Payment method validation
+    - Payment gateway integration
+    - Transaction processing
+    - Refund handling
+    - Payment security (PCI compliance)
+    - Fraud detection
+    - Payment analytics
+    - Multi-currency support
+    - Payment retry mechanisms
+
+#### 3. Shipment Domain
+*   **States:**
+    - PENDING → Awaiting processing
+    - PROCESSING → Order being packed
+    - READY_FOR_PICKUP → Awaiting carrier
+    - IN_TRANSIT → Being delivered
+    - DELIVERED → Successfully completed
+    - FAILED_DELIVERY → Delivery attempt failed
+    - RETURNED → Shipment returned
+
+*   **Responsibilities:**
+    - Delivery partner assignment
+    - Route optimization
+    - Real-time tracking
+    - Delivery time estimation
+    - Proof of delivery
+    - Return shipment handling
+    - Multi-carrier integration
+    - Shipping rate calculation
+
+#### 4. Inventory Domain
+*   **States:**
+    - AVAILABLE → Ready for sale
+    - RESERVED → Held for order
+    - OUT_OF_STOCK → Not available
+    - LOW_STOCK → Below threshold
+    - DAMAGED → Not sellable
+    - IN_TRANSIT → Being transferred
+
+*   **Responsibilities:**
+    - Stock level management
+    - Inventory reservation
+    - Restock notifications
+    - Warehouse management
+    - Stock verification
+    - Inventory analytics
+    - Multi-location support
+
+#### 5. Communication Domain
+*   **Event Types:**
+    - Order confirmations
+    - Payment notifications
+    - Shipping updates
+    - Delivery notifications
+    - Stock alerts
+    - Customer service updates
+    - Marketing communications
+
+*   **Responsibilities:**
+    - Email notifications
+    - SMS alerts
+    - Push notifications
+    - In-app messaging
+    - Communication preferences
+    - Template management
+    - Multi-language support
+
+#### 6. Invoice Domain
+*   **States:**
+    - DRAFT → Initial creation
+    - ISSUED → Sent to customer
+    - PAID → Payment received
+    - PARTIALLY_PAID → Incomplete payment
+    - OVERDUE → Payment late
+    - CANCELLED → Invoice cancelled
+    - REFUNDED → Payment returned
+
+*   **Responsibilities:**
+    - Invoice generation
+    - Tax calculation
+    - Payment tracking
+    - Credit note handling
+    - Invoice numbering
+    - Legal compliance
+    - Digital signature
+    - Archive management
+
+#### Cross-Domain Integration
+*   **Event-Driven Communication:**
+    - Order created → Inventory reserved
+    - Payment successful → Order processing initiated
+    - Order processing → Shipment created
+    - Delivery completed → Invoice finalized
+
+*   **Consistency Patterns:**
+    - Saga pattern for distributed transactions
+    - Event sourcing for state tracking
+    - CQRS for complex queries
+    - Outbox pattern for reliable messaging
+
+*   **Failure Handling:**
+    - Compensation transactions
+    - Retry mechanisms
+    - Dead letter queues
+    - Circuit breakers
+    - Fallback strategies
+
+#### Technical Considerations
+*   **Scalability:**
+    - Microservices architecture
+    - Domain-driven design
+    - Event-driven architecture
+    - Asynchronous processing
+    - Caching strategies
+    - Database sharding
+
+*   **Reliability:**
+    - Distributed tracing
+    - Error tracking
+    - Monitoring and alerting
+    - Data replication
+    - Backup strategies
+
+*   **Security:**
+    - Authentication/Authorization
+    - Data encryption
+    - Audit logging
+    - Rate limiting
+    - GDPR compliance
+
+*   **Performance:**
+    - Query optimization
+    - Caching layers
+    - Message queuing
+    - Load balancing
+    - Connection pooling 
