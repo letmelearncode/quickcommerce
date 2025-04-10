@@ -9,7 +9,10 @@ import com.quickcommerce.backend.service.CartService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.UUID;
@@ -17,6 +20,7 @@ import java.util.UUID;
 @RestController
 @RequestMapping("/api/cart")
 @RequiredArgsConstructor
+@Slf4j
 public class CartController {
 
     private final CartService cartService;
@@ -29,6 +33,15 @@ public class CartController {
      */
     @GetMapping
     public ResponseEntity<CartDTO> getCart(@CurrentUser User user, HttpServletRequest request) {
+        // Debug logging
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        log.info("Authentication: {}", auth);
+        if (auth != null) {
+            log.info("Authentication principal: {}, name: {}, authorities: {}", 
+                auth.getPrincipal(), auth.getName(), auth.getAuthorities());
+        }
+        
+        log.info("getCart called with user: {}", user);
         String sessionId = getOrCreateSessionId(request, user);
         return ResponseEntity.ok(cartService.getCart(user, sessionId));
     }

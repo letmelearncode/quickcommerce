@@ -3,6 +3,7 @@ package com.quickcommerce.backend.security;
 import com.quickcommerce.backend.model.User;
 import com.quickcommerce.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList; // Use this for empty authorities list for now
+import java.util.Collection;
 
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
@@ -25,26 +27,65 @@ public class CustomUserDetailsService implements UserDetailsService {
                         new UsernameNotFoundException("User not found with email : " + email)
                 );
 
-        // Spring Security User object (can be customized later with roles/authorities)
-        return new org.springframework.security.core.userdetails.User(
-                user.getEmail(),
-                user.getPassword(),
-                new ArrayList<>() // Empty authorities list for now
-        );
-        // To use roles, you would map user.getRoles() to GrantedAuthority objects
+        return new UserPrincipal(user);
     }
 
-    // Used by JWTAuthenticationFilter (if we implement JWT)
+    // Used by JWTAuthenticationFilter
     @Transactional
     public UserDetails loadUserById(Long id) {
-         User user = userRepository.findById(id).orElseThrow(
+        User user = userRepository.findById(id).orElseThrow(
             () -> new UsernameNotFoundException("User not found with id : " + id)
         );
-        // Return the Spring Security User object as above
-        return new org.springframework.security.core.userdetails.User(
-                user.getEmail(),
-                user.getPassword(),
-                new ArrayList<>() 
-        );
+        return new UserPrincipal(user);
+    }
+    
+    /**
+     * Custom UserDetails implementation that wraps a User entity
+     */
+    public static class UserPrincipal implements UserDetails {
+        private final User user;
+        
+        public UserPrincipal(User user) {
+            this.user = user;
+        }
+        
+        public User getUser() {
+            return user;
+        }
+        
+        @Override
+        public Collection<? extends GrantedAuthority> getAuthorities() {
+            return new ArrayList<>(); // Empty authorities for now
+        }
+        
+        @Override
+        public String getPassword() {
+            return user.getPassword();
+        }
+        
+        @Override
+        public String getUsername() {
+            return user.getEmail();
+        }
+        
+        @Override
+        public boolean isAccountNonExpired() {
+            return true;
+        }
+        
+        @Override
+        public boolean isAccountNonLocked() {
+            return true;
+        }
+        
+        @Override
+        public boolean isCredentialsNonExpired() {
+            return true;
+        }
+        
+        @Override
+        public boolean isEnabled() {
+            return true;
+        }
     }
 } 
