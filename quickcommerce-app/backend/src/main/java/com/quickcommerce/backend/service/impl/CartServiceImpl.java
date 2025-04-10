@@ -86,8 +86,8 @@ public class CartServiceImpl implements CartService {
                 cart.getId(), cart.getUser() != null ? cart.getUser().getId() : null, 
                 cart.getSessionId(), cart.getItems().size());
         
-        // Find cart item - improved query to ensure item belongs to this cart
-        Optional<CartItem> itemOpt = cartItemRepository.findByIdAndCart(itemId, cart);
+        // Find cart item - using cart ID now instead of cart entity
+        Optional<CartItem> itemOpt = cartItemRepository.findByIdAndCartId(itemId, cart.getId());
         
         if (!itemOpt.isPresent()) {
             // Debug why the item wasn't found
@@ -122,8 +122,8 @@ public class CartServiceImpl implements CartService {
     public CartDTO removeFromCart(User user, String sessionId, Long itemId) {
         Cart cart = getOrCreateCart(user, sessionId);
         
-        // Find cart item using the repository to ensure it belongs to this cart
-        CartItem item = cartItemRepository.findByIdAndCart(itemId, cart)
+        // Find cart item using the repository with cart ID
+        CartItem item = cartItemRepository.findByIdAndCartId(itemId, cart.getId())
                 .orElseThrow(() -> new NotFoundException("Cart item not found with ID: " + itemId + " in your cart"));
         
         // Remove item
