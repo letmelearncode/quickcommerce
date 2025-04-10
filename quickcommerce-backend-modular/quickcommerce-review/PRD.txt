@@ -1,0 +1,205 @@
+QuickCommerce Review & Rating Module PRD
+====================================
+
+1. Module Scope
+--------------
+The Review & Rating module manages customer feedback and product evaluations:
+- Product reviews
+- Seller ratings
+- Customer feedback
+- Review moderation
+- Rating analytics
+- Media attachments
+- Review rewards
+- Response management
+- Sentiment analysis
+- Quality scoring
+
+2. Core APIs
+-----------
+a) Review Management
+   POST /api/v1/reviews
+   GET /api/v1/reviews/{id}
+   PUT /api/v1/reviews/{id}
+   DELETE /api/v1/reviews/{id}
+   GET /api/v1/reviews/product/{productId}
+
+b) Rating Operations
+   POST /api/v1/ratings
+   GET /api/v1/ratings/product/{productId}
+   GET /api/v1/ratings/seller/{sellerId}
+   GET /api/v1/ratings/summary/{entityId}
+   PUT /api/v1/ratings/{id}
+
+c) Moderation
+   POST /api/v1/reviews/moderate
+   PUT /api/v1/reviews/{id}/status
+   GET /api/v1/reviews/pending
+   POST /api/v1/reviews/{id}/report
+   POST /api/v1/reviews/{id}/approve
+
+d) Media Management
+   POST /api/v1/reviews/{id}/media
+   DELETE /api/v1/reviews/{id}/media/{mediaId}
+   GET /api/v1/reviews/{id}/media
+   POST /api/v1/reviews/media/moderate
+
+3. Lifecycle Events
+------------------
+a) Review Creation
+   - Purchase verification
+   - Content validation
+   - Media processing
+   - Spam detection
+   - Initial scoring
+
+b) Review Moderation
+   - Content review
+   - Sentiment analysis
+   - Policy compliance
+   - Status update
+   - Notification dispatch
+
+c) Review Publication
+   - Score calculation
+   - Index update
+   - Cache refresh
+   - Analytics update
+   - Reward processing
+
+4. Role in Prepaid Buying Flow
+-----------------------------
+- Review eligibility check
+- Purchase verification
+- Review prompts
+- Rating display
+- Trust indicators
+- Review rewards
+- Feedback collection
+
+5. Real-World Problems and Solutions
+---------------------------------
+a) Review Quality
+   Problem: Ensuring authentic and helpful reviews
+   Solution:
+   - Verified purchase badges
+   - Quality scoring
+   - Review guidelines
+   - Helpful votes
+   - Reward system
+
+b) Content Moderation
+   Problem: Managing inappropriate content
+   Solution:
+   - AI-based moderation
+   - User reporting
+   - Manual review queue
+   - Content filtering
+   - Policy enforcement
+
+c) Review Manipulation
+   Problem: Preventing fake or biased reviews
+   Solution:
+   - Purchase verification
+   - Pattern detection
+   - IP tracking
+   - Time restrictions
+   - Account validation
+
+d) Scale Management
+   Problem: Handling large volume of reviews
+   Solution:
+   - Automated processing
+   - Batch operations
+   - Priority queue
+   - Load balancing
+   - Cache strategy
+
+e) Media Processing
+   Problem: Managing review attachments
+   Solution:
+   - Cloud storage
+   - Image optimization
+   - Format validation
+   - Content filtering
+   - CDN integration
+
+6. Integration Points
+-------------------
+- Product Module: Product data
+- Order Module: Purchase verification
+- User Module: User profiles
+- Analytics Module: Performance metrics
+- Search Module: Review indexing
+- Communication Module: Notifications
+
+7. Performance Metrics
+--------------------
+- Review submission: < 2s
+- Media upload: < 5s
+- Rating calculation: < 100ms
+- Moderation time: < 24h
+- System availability: 99.9%
+
+8. Security Considerations
+------------------------
+- Content validation
+- User authentication
+- Media scanning
+- Rate limiting
+- Access control
+- Data privacy
+
+9. Future Enhancements
+---------------------
+- Video reviews
+- Voice reviews
+- AR product reviews
+- Social integration
+- Advanced analytics
+- Review summarization
+
+10. Monitoring and Alerts
+-----------------------
+- Moderation queue
+- System performance
+- Abuse patterns
+- Error rates
+- Review volumes
+- Response times
+
+11. Analytics Requirements
+------------------------
+- Review metrics
+- Rating trends
+- User engagement
+- Sentiment analysis
+- Response rates
+- Quality scores
+
+12. Compliance Requirements
+-------------------------
+- Content guidelines
+- Privacy laws
+- Data retention
+- User consent
+- Legal disclaimers
+- Export regulations
+
+13. Reward System
+---------------
+- Points allocation
+- Reward criteria
+- Quality bonuses
+- Redemption rules
+- Fraud prevention
+- Status levels
+
+14. Integration Features
+---------------------
+- Social sharing
+- SEO optimization
+- Email integration
+- API access
+- Export capabilities
+- Reporting tools 

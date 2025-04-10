@@ -1,0 +1,201 @@
+QuickCommerce Shipment Module PRD
+==============================
+
+1. Module Scope
+--------------
+The Shipment module manages all aspects of order delivery in the QuickCommerce platform:
+- Shipping provider integration
+- Delivery tracking
+- Rate calculation
+- Label generation
+- Route optimization
+- Delivery scheduling
+- Return management
+- Carrier management
+
+2. Core APIs
+-----------
+a) Shipment Management
+   POST /api/v1/shipments
+   GET /api/v1/shipments/{id}
+   PUT /api/v1/shipments/{id}/status
+   DELETE /api/v1/shipments/{id}
+   GET /api/v1/shipments/track/{trackingNumber}
+
+b) Rate Calculation
+   POST /api/v1/shipments/rates/calculate
+   GET /api/v1/shipments/rates/available
+   POST /api/v1/shipments/rates/estimate
+   GET /api/v1/shipments/zones
+
+c) Label Management
+   POST /api/v1/shipments/labels/generate
+   GET /api/v1/shipments/labels/{id}
+   POST /api/v1/shipments/labels/void
+   POST /api/v1/shipments/labels/bulk
+
+d) Return Management
+   POST /api/v1/shipments/returns
+   GET /api/v1/shipments/returns/{id}
+   PUT /api/v1/shipments/returns/{id}/status
+   POST /api/v1/shipments/returns/label
+
+3. Lifecycle Events
+------------------
+a) Shipment Creation
+   - Order validation
+   - Rate calculation
+   - Carrier selection
+   - Label generation
+   - Pickup scheduling
+
+b) Shipment Processing
+   - Status updates
+   - Location tracking
+   - ETA calculation
+   - Exception handling
+   - Notification dispatch
+
+c) Delivery Completion
+   - Proof of delivery
+   - Status update
+   - Customer notification
+   - Analytics update
+   - Review request
+
+4. Role in Prepaid Buying Flow
+-----------------------------
+- Shipping cost calculation
+- Delivery date estimation
+- Carrier availability check
+- Address validation
+- Service level selection
+- Special handling flags
+- Insurance calculation
+
+5. Real-World Problems and Solutions
+---------------------------------
+a) Delivery Accuracy
+   Problem: Ensuring accurate delivery times
+   Solution:
+   - Real-time tracking
+   - ML-based ETA
+   - Weather integration
+   - Traffic analysis
+   - Historical data
+
+b) Address Validation
+   Problem: Handling incorrect addresses
+   Solution:
+   - Address verification
+   - Geocoding
+   - Suggestion engine
+   - Manual review
+   - Customer confirmation
+
+c) Rate Optimization
+   Problem: Finding best shipping rates
+   Solution:
+   - Multi-carrier API
+   - Rate comparison
+   - Volume discounts
+   - Route optimization
+   - Consolidation
+
+d) Exception Handling
+   Problem: Managing delivery exceptions
+   Solution:
+   - Exception workflows
+   - Alternative delivery
+   - Customer communication
+   - Rerouting options
+   - Automated recovery
+
+e) Last-Mile Delivery
+   Problem: Optimizing final delivery
+   Solution:
+   - Local carrier network
+   - Delivery windows
+   - Real-time tracking
+   - Customer coordination
+   - Proof of delivery
+
+6. Integration Points
+-------------------
+- Order Module: Order details
+- Inventory Module: Warehouse location
+- User Module: Delivery preferences
+- Communication Module: Status updates
+- Payment Module: Shipping charges
+- Analytics Module: Performance tracking
+
+7. Performance Metrics
+--------------------
+- Label generation: < 2s
+- Rate calculation: < 1s
+- Tracking updates: < 5min
+- API response time: < 300ms
+- Success rate: > 99%
+
+8. Security Considerations
+------------------------
+- Carrier credentials
+- Label security
+- Address encryption
+- Access control
+- Audit logging
+- Data protection
+
+9. Future Enhancements
+---------------------
+- Drone delivery
+- Smart routing
+- Predictive ETAs
+- Green shipping
+- Automated warehouses
+- Blockchain tracking
+
+10. Carrier Integration
+---------------------
+- Multiple carriers
+- API integration
+- Service mapping
+- Rate contracts
+- Label formats
+- Tracking systems
+
+11. Monitoring and Alerts
+-----------------------
+- Delivery delays
+- Label errors
+- Rate issues
+- Carrier problems
+- System performance
+- Exception rates
+
+12. Compliance Requirements
+-------------------------
+- Shipping regulations
+- Hazmat compliance
+- International laws
+- Customs requirements
+- Insurance regulations
+- Privacy laws
+
+13. Analytics and Reporting
+-------------------------
+- Delivery performance
+- Cost analysis
+- Carrier metrics
+- Route efficiency
+- Exception patterns
+- Customer satisfaction
+
+14. Warehouse Integration
+-----------------------
+- Pickup scheduling
+- Dock management
+- Load planning
+- Space optimization
+- Resource allocation
+- Equipment tracking 
