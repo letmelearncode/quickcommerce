@@ -218,3 +218,89 @@ This document outlines the requirements for the QuickCommerce Delivery App, a **
 *   Detailed workflow for handling out-of-stock items during fulfillment.
 *   Specific background check provider for delivery partners.
 *   Detailed customer support workflow and tooling. 
+
+## 10. Scaling Challenges & Mitigation Strategies
+
+As the QuickCommerce platform grows, several technical challenges will emerge that require proactive planning and implementation. This section outlines the major scaling concerns and proposed solutions.
+
+### 10.1 Inventory Race Conditions
+
+**Challenge:** Multiple users purchasing the same limited-stock items simultaneously can lead to overselling.
+
+**Mitigation Strategies:**
+* Implement pessimistic locking during checkout to prevent concurrent inventory deductions
+* Create time-limited inventory reservations during the checkout process
+* Develop an event-driven architecture for sequential inventory updates
+* Prepare compensating transactions for post-purchase inventory reconciliation
+
+### 10.2 Flash Sale & Traffic Spikes
+
+**Challenge:** Promotional events can cause extreme traffic surges that overwhelm systems.
+
+**Mitigation Strategies:**
+* Implement comprehensive caching for product details, images, and pricing
+* Design queue-based checkout architecture to handle peak loads
+* Configure auto-scaling for web and API tiers
+* Offload static assets to CDN
+* Apply user/IP rate limiting during extreme events
+
+### 10.3 Payment Processing Resilience
+
+**Challenge:** Transient payment gateway issues can lead to lost orders and revenue.
+
+**Mitigation Strategies:**
+* Implement intelligent retry mechanisms with exponential backoff
+* Use two-phase payment processing (Stripe Payment Intents)
+* Process payments asynchronously with status tracking
+* Support fallback payment processors
+* Develop partial order fulfillment capabilities
+
+### 10.4 Database Scaling
+
+**Challenge:** Database performance becomes a bottleneck as order volume grows.
+
+**Mitigation Strategies:**
+* Deploy read replicas for query offloading
+* Implement data partitioning (sharding) based on appropriate dimensions
+* Separate read and write models (CQRS pattern)
+* Archive historical data to optimize active dataset size
+* Utilize specialized databases for appropriate workloads
+
+### 10.5 Session & Cart Management
+
+**Challenge:** Managing user sessions and cart state across distributed infrastructure.
+
+**Mitigation Strategies:**
+* Use distributed session storage (Redis)
+* Implement stateless authentication with minimal session data in JWTs
+* Persist cart state to database rather than session
+* Track cart changes as events for resilience
+* Develop intelligent cart merging between guest and authenticated sessions
+
+### 10.6 Real-time Capabilities
+
+**Challenge:** Maintaining real-time features (tracking, inventory updates) at scale.
+
+**Mitigation Strategies:**
+* Implement change data capture for streaming updates
+* Use WebSockets for active user sessions
+* Accept eventual consistency for non-critical updates
+* Employ short-lived caching with appropriate invalidation
+* Maintain safety buffers in displayed inventory
+
+### 10.7 Implementation Prioritization
+
+1. **Immediate Focus (MVP):**
+   * Inventory race condition prevention
+   * Payment processing resilience
+   * Session and cart management
+
+2. **Growth Preparation:**
+   * Database scaling strategies
+   * Search performance optimization
+   * Order processing pipeline
+
+3. **Scale Readiness:**
+   * Flash sale infrastructure
+   * Real-time data distribution
+   * Comprehensive caching strategy 

@@ -42,11 +42,14 @@ export const CartProvider = ({ children }) => {
         setError(null);
         
         try {
-            const response = await fetch('/api/cart', {
+            // Add cache-busting query parameter and no-store cache option
+            const response = await fetch(`/api/cart?_=${Date.now()}`, {
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
-                }
+                },
+                cache: 'no-store', // Tell browser not to use cache
+                credentials: 'include' // Include cookies in the request
             });
             
             if (!response.ok) {
@@ -80,12 +83,14 @@ export const CartProvider = ({ children }) => {
         setError(null);
         
         try {
-            const response = await fetch('/api/cart/merge', {
+            const response = await fetch(`/api/cart/merge?_=${Date.now()}`, {
                 method: 'POST',
                 headers: {
                     'Authorization': `Bearer ${token}`,
                     'Content-Type': 'application/json'
-                }
+                },
+                cache: 'no-store',
+                credentials: 'include'
             });
             
             if (!response.ok) {
@@ -148,7 +153,7 @@ export const CartProvider = ({ children }) => {
             setIsLoading(true);
             
             try {
-                const response = await fetch('/api/cart/items', {
+                const response = await fetch(`/api/cart/items?_=${Date.now()}`, {
                     method: 'POST',
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -157,7 +162,9 @@ export const CartProvider = ({ children }) => {
                     body: JSON.stringify({
                         productId: productToAdd.id,
                         quantity: quantity
-                    })
+                    }),
+                    cache: 'no-store',
+                    credentials: 'include'
                 });
                 
                 if (!response.ok) {
@@ -202,11 +209,10 @@ export const CartProvider = ({ children }) => {
             setIsLoading(true);
             
             try {
-                // First, find the cart item ID that corresponds to this product
-                // This is a simplification - in a real app you would store cart item IDs
-                const cartItemId = productId; // This is a simplification
+                // In our backend, the itemId parameter is actually the productId
+                const itemId = productId;
                 
-                const response = await fetch(`/api/cart/items/${cartItemId}`, {
+                const response = await fetch(`/api/cart/items/${itemId}?_=${Date.now()}`, {
                     method: 'PUT',
                     headers: {
                         'Authorization': `Bearer ${token}`,
@@ -214,7 +220,9 @@ export const CartProvider = ({ children }) => {
                     },
                     body: JSON.stringify({
                         quantity: newQuantity
-                    })
+                    }),
+                    cache: 'no-store',
+                    credentials: 'include'
                 });
                 
                 if (!response.ok) {
@@ -244,16 +252,17 @@ export const CartProvider = ({ children }) => {
             setIsLoading(true);
             
             try {
-                // First, find the cart item ID that corresponds to this product
-                // This is a simplification - in a real app you would store cart item IDs
-                const cartItemId = productId; // This is a simplification
+                // In our backend, the itemId parameter is actually the productId
+                const itemId = productId;
                 
-                const response = await fetch(`/api/cart/items/${cartItemId}`, {
+                const response = await fetch(`/api/cart/items/${itemId}?_=${Date.now()}`, {
                     method: 'DELETE',
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json'
-                    }
+                    },
+                    cache: 'no-store',
+                    credentials: 'include'
                 });
                 
                 if (!response.ok) {
@@ -283,12 +292,14 @@ export const CartProvider = ({ children }) => {
             setIsLoading(true);
             
             try {
-                const response = await fetch('/api/cart', {
+                const response = await fetch(`/api/cart?_=${Date.now()}`, {
                     method: 'DELETE',
                     headers: {
                         'Authorization': `Bearer ${token}`,
                         'Content-Type': 'application/json'
-                    }
+                    },
+                    cache: 'no-store',
+                    credentials: 'include'
                 });
                 
                 if (!response.ok) {

@@ -127,8 +127,8 @@ This task list is derived from the features outlined in `PRD.txt`. Check items o
 - [ ] [Backend] Implement Address Controller endpoints (CRUD for current user)
 
 ### Checkout & Payment
-- [ ] [UI] Implement Order Summary Review screen UI
-- [ ] **Integrate Payment Gateway (Stripe)**
+- [x] [UI] Implement Order Summary Review screen UI
+- **Integrate Payment Gateway (Stripe)**
     - [ ] [UI] Setup Stripe account & keys (client-side)
     - [ ] [UI] Integrate React Stripe Elements for payment method input
     - [ ] [UI] Handle payment intent client secret from backend
@@ -144,10 +144,10 @@ This task list is derived from the features outlined in `PRD.txt`. Check items o
 - [ ] [Backend] Implement logic/endpoints for validating and applying promo codes
 - [ ] [UI] Implement Order Confirmation screen UI
 - [ ] [UI] Implement Payment Failure handling (UI feedback & potential retry)
-- [ ] [Backend] Define Order/OrderItem entities/models
-- [ ] [Backend] Implement Order creation logic in service layer (triggered after successful payment)
-- [ ] [Backend] Implement Order Repository
-- [ ] [Backend] Implement Order Controller endpoints (e.g., place order)
+- [x] [Backend] Define Order/OrderItem entities/models
+- [x] [Backend] Implement Order creation logic in service layer (triggered after successful payment)
+- [x] [Backend] Implement Order Repository
+- [x] [Backend] Implement Order Controller endpoints (e.g., place order)
 
 ### Order Management & Tracking
 - [x] [UI] Implement Order History screen (Past & Current) UI
@@ -163,7 +163,7 @@ This task list is derived from the features outlined in `PRD.txt`. Check items o
 - [ ] [Backend] Implement ETA calculation logic (potentially involving external map APIs)
 - [ ] [Backend] Include ETA in location update broadcasts
 - [x] [UI] Implement 'Reorder' button/flow UI
-- [ ] [Backend] Implement endpoint/logic for reordering
+- [x] [Backend] Implement endpoint/logic for reordering
 
 ### Notifications
 - **Setup Web Push (FCM) / Email (SendGrid)**
