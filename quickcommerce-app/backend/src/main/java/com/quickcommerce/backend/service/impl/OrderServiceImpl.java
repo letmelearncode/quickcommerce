@@ -16,6 +16,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import com.quickcommerce.backend.repository.AddressRepository;
+import com.quickcommerce.backend.repository.PaymentMethodRepository;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -32,7 +34,9 @@ public class OrderServiceImpl implements OrderService {
     private final UserRepository userRepository;
     private final ProductRepository productRepository;
     private final CartService cartService;
-    
+    private final AddressRepository addressRepository;
+    private final PaymentMethodRepository paymentMethodRepository;
+
     @Override
     @Transactional
     public OrderDTO createOrder(User user, CreateOrderRequest request) {
@@ -54,6 +58,7 @@ public class OrderServiceImpl implements OrderService {
         
         // 3. Set addresses
         Address shippingAddress = mapAddressDTOToAddress(request.getShippingAddress());
+        shippingAddress = addressRepository.save(shippingAddress);
         order.setShippingAddress(shippingAddress);
         
         Address billingAddress;
@@ -61,13 +66,15 @@ public class OrderServiceImpl implements OrderService {
             billingAddress = shippingAddress;
         } else {
             billingAddress = mapAddressDTOToAddress(request.getBillingAddress());
+            billingAddress = addressRepository.save(billingAddress);
         }
         order.setBillingAddress(billingAddress);
         
-        // 4. Set payment method (basic info for now, will be updated by payment service)
+        // 4. Set payment method
         PaymentMethod paymentMethod = new PaymentMethod();
-        paymentMethod.setType(PaymentMethod.PaymentType.CREDIT_CARD); // Default, will be updated
+        paymentMethod.setType(PaymentMethod.PaymentType.CREDIT_CARD);
         paymentMethod.setPaymentMethodId(request.getPaymentMethodId());
+        paymentMethod = paymentMethodRepository.save(paymentMethod);
         order.setPaymentMethod(paymentMethod);
         
         // 5. Set additional info
@@ -96,6 +103,7 @@ public class OrderServiceImpl implements OrderService {
         order.setShippingCost(calculateShippingCost(cartDTO));
         order.setDiscount(BigDecimal.ZERO); // Apply discounts if promo code is provided
         order.calculateTotal();
+        order.setLastUpdated(LocalDateTime.now());
         
         // 8. Save the order
         Order savedOrder = orderRepository.save(order);
@@ -333,6 +341,10 @@ public class OrderServiceImpl implements OrderService {
                 .map(this::mapOrderItemToDTO)
                 .collect(Collectors.toList());
         
+        Address shippingAddress = order.getShippingAddress();
+        Address billingAddress = order.getBillingAddress();
+        PaymentMethod paymentMethod = order.getPaymentMethod();
+        
         return OrderDTO.builder()
                 .id(order.getId())
                 .orderNumber(order.getOrderNumber())
@@ -344,9 +356,9 @@ public class OrderServiceImpl implements OrderService {
                 .discount(order.getDiscount())
                 .total(order.getTotal())
                 .items(itemDTOs)
-                .shippingAddress(mapAddressToDTO(order.getShippingAddress()))
-                .billingAddress(mapAddressToDTO(order.getBillingAddress()))
-                .paymentMethod(mapPaymentMethodToDTO(order.getPaymentMethod()))
+                .shippingAddress(mapAddressToDTO(shippingAddress))
+                .billingAddress(mapAddressToDTO(billingAddress))
+                .paymentMethod(mapPaymentMethodToDTO(paymentMethod))
                 .notes(order.getNotes())
                 .deliveryInstructions(order.getDeliveryInstructions())
                 .orderDate(order.getOrderDate())

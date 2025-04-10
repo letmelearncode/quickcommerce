@@ -55,6 +55,57 @@ This document outlines the requirements for the QuickCommerce Delivery App, a **
     *   Real-time map-based tracking of delivery partner's location.
     *   Dynamic ETA updates based on traffic and delivery progress.
     *   Option to reorder previous purchases easily.
+
+*   **Prepaid Order Lifecycle:**
+    *   **Order Creation (PENDING):**
+        - User adds items to cart
+        - Provides delivery address
+        - Selects payment method
+        - Reviews order summary
+        - Initiates payment
+        - System validates inventory and reserves items
+        - Payment gateway processes transaction
+        - Order created with PENDING status
+        - Order number generated
+        - Confirmation email/notification sent
+    
+    *   **Order Processing (PROCESSING):**
+        - Store/warehouse receives order notification
+        - Items are picked and packed
+        - Quality check performed
+        - Order marked ready for pickup
+        - System looks for available delivery partners
+    
+    *   **Order Pickup (IN_TRANSIT):**
+        - Delivery partner assigned
+        - Partner arrives at store/warehouse
+        - Verifies order details and items
+        *   Scans pickup confirmation
+        - Starts delivery journey
+        - Real-time location tracking begins
+    
+    *   **Order Delivery (DELIVERED):**
+        - Partner arrives at delivery location
+        - Customer receives delivery notification
+        - Order handed over to customer
+        - Delivery confirmation captured
+        - Customer can rate delivery experience
+        - Order marked as completed
+    
+    *   **Order Cancellation (CANCELLED):**
+        - Can be initiated before order moves to IN_TRANSIT
+        - Refund process initiated automatically
+        - Inventory released back to stock
+        - Cancellation notification sent
+        - Order marked as cancelled
+
+    *   **Event Tracking & Notifications:**
+        - Each status change triggers notifications
+        - Real-time updates in customer app
+        - Email confirmations for major events
+        - Push notifications for critical updates
+        - All events timestamped and logged
+
 *   **Notifications:**
     *   **Web Push notifications / In-browser alerts / Email notifications** for: Order confirmation, Payment success/failure, Delivery partner assigned, Partner arriving soon, Order delivered, Special offers/promotions.
     *   In-app notification center.

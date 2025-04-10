@@ -107,7 +107,7 @@ public class OrderController {
             @PathVariable Long orderId) {
         
         log.info("Reordering for user: {}, orderId: {}", user.getEmail(), orderId);
-        CartDTO cart = (CartDTO) orderService.reorder(user, orderId);
+        CartDTO cart = orderService.reorder(user, orderId);
         return ResponseEntity.ok(cart);
     }
     

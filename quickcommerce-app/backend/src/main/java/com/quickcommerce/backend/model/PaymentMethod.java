@@ -1,9 +1,6 @@
 package com.quickcommerce.backend.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -11,24 +8,32 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Embeddable
+@Entity
+@Table(name = "payment_methods")
 public class PaymentMethod {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
     
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private PaymentType type;
     
-    // For credit card payments
-    private String cardBrand; // Visa, Mastercard, etc.
+    @Column(name = "card_brand")
+    private String cardBrand;
     
-    private String last4; // Last 4 digits of card
+    @Column(name = "last_4")
+    private String last4;
     
+    @Column(name = "expiry_month")
     private String expiryMonth;
     
+    @Column(name = "expiry_year")
     private String expiryYear;
     
-    // For stored payment methods in Stripe
-    private String paymentMethodId; // Stripe payment method ID
+    @Column(name = "payment_method_id")
+    private String paymentMethodId;
     
     // Define the payment types
     public enum PaymentType {

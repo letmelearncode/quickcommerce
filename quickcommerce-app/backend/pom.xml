@@ -154,6 +154,27 @@
 					</excludes>
 				</configuration>
 			</plugin>
+			<plugin>
+				<groupId>org.flywaydb</groupId>
+				<artifactId>flyway-maven-plugin</artifactId>
+				<version>10.10.0</version>
+				<configuration>
+					<url>jdbc:postgresql://localhost:5432/quickcommerce_db</url>
+					<user>postgres</user>
+					<password>password</password>
+					<baselineOnMigrate>true</baselineOnMigrate>
+					<outOfOrder>true</outOfOrder>
+					<validateMigrationNaming>true</validateMigrationNaming>
+					<baselineVersion>7</baselineVersion>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>org.postgresql</groupId>
+						<artifactId>postgresql</artifactId>
+						<version>42.7.2</version>
+					</dependency>
+				</dependencies>
+			</plugin>
 		</plugins>
 	</build>
 

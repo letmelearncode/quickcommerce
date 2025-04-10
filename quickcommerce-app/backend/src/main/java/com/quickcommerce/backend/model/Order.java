@@ -1,12 +1,7 @@
 package com.quickcommerce.backend.model;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -14,122 +9,118 @@ import java.util.List;
 
 @Data
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "orders")
 public class Order {
-    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    
-    @Column(unique = true)
+
+    @Column(unique = true, nullable = false)
     private String orderNumber;
-    
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
+
+    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrderItem> items = new ArrayList<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "shipping_address_id")
+    private Address shippingAddress;
     
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "billing_address_id")
+    private Address billingAddress;
+    
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "payment_method_id")
+    private PaymentMethod paymentMethod;
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private OrderStatus status;
-    
-    @Column(nullable = false)
+
+    @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal subtotal;
-    
-    @Column(nullable = false)
+
+    @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal tax;
-    
-    @Column(nullable = false)
+
+    @Column(name = "shipping_cost", nullable = false, precision = 10, scale = 2)
     private BigDecimal shippingCost;
-    
-    @Column(nullable = false)
+
+    @Column(precision = 10, scale = 2)
     private BigDecimal discount;
-    
-    @Column(nullable = false)
+
+    @Column(nullable = false, precision = 10, scale = 2)
     private BigDecimal total;
-    
-    @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<OrderItem> items = new ArrayList<>();
-    
-    @Embedded
-    private Address shippingAddress;
-    
-    @Embedded
-    @AttributeOverrides({
-        @AttributeOverride(name = "street", column = @Column(name = "billing_street")),
-        @AttributeOverride(name = "city", column = @Column(name = "billing_city")),
-        @AttributeOverride(name = "state", column = @Column(name = "billing_state")),
-        @AttributeOverride(name = "zipCode", column = @Column(name = "billing_zip_code")),
-        @AttributeOverride(name = "country", column = @Column(name = "billing_country")),
-        @AttributeOverride(name = "fullName", column = @Column(name = "billing_full_name")),
-        @AttributeOverride(name = "phone", column = @Column(name = "billing_phone")),
-        @AttributeOverride(name = "apartment", column = @Column(name = "billing_apartment")),
-        @AttributeOverride(name = "additionalInfo", column = @Column(name = "billing_additional_info")),
-        @AttributeOverride(name = "isDefault", column = @Column(name = "billing_is_default"))
-    })
-    private Address billingAddress;
-    
-    @Embedded
-    private PaymentMethod paymentMethod;
-    
+
     private String notes;
-    
+
+    @Column(name = "delivery_instructions")
     private String deliveryInstructions;
-    
-    @Column(nullable = false, updatable = false)
-    @CreationTimestamp
+
+    @Column(name = "order_date", nullable = false)
     private LocalDateTime orderDate;
-    
-    @UpdateTimestamp
+
+    @Column(name = "last_updated")
     private LocalDateTime lastUpdated;
-    
+
+    @Column(name = "processed_date")
     private LocalDateTime processedDate;
-    
+
+    @Column(name = "shipped_date")
     private LocalDateTime shippedDate;
-    
+
+    @Column(name = "delivered_date")
     private LocalDateTime deliveredDate;
-    
+
+    @Column(name = "cancelled_date")
     private LocalDateTime cancelledDate;
-    
-    @ManyToOne
+
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "delivery_partner_id")
     private User deliveryPartner;
-    
-    @Column(nullable = false)
+
+    @Column(name = "is_paid")
     private Boolean isPaid = false;
-    
-    private String stripePaymentIntentId;
-    
-    // Helper methods
+
+    @PrePersist
+    @PreUpdate
+    protected void onSave() {
+        lastUpdated = LocalDateTime.now();
+    }
+
+    public enum OrderStatus {
+        PENDING,
+        PROCESSING,
+        IN_TRANSIT,
+        DELIVERED,
+        CANCELLED
+    }
+
     public void addItem(OrderItem item) {
         items.add(item);
         item.setOrder(this);
     }
-    
+
     public void removeItem(OrderItem item) {
         items.remove(item);
         item.setOrder(null);
     }
-    
-    // Recalculate total
+
     public void calculateTotal() {
-        this.subtotal = items.stream()
-                .map(OrderItem::getSubtotal)
-                .reduce(BigDecimal.ZERO, BigDecimal::add);
-        
-        // Calculate tax (assuming tax is applied to subtotal)
-        // In a real app, you might have more complex tax rules
         this.total = this.subtotal
                 .add(this.tax)
                 .add(this.shippingCost)
-                .subtract(this.discount);
+                .subtract(this.discount != null ? this.discount : BigDecimal.ZERO);
     }
-    
-    // Set the appropriate timestamp based on status change
+
     public void updateStatusTimestamp(OrderStatus newStatus) {
         this.status = newStatus;
-        
+        this.lastUpdated = LocalDateTime.now();
+
         switch (newStatus) {
             case PROCESSING:
                 this.processedDate = LocalDateTime.now();
@@ -143,15 +134,8 @@ public class Order {
             case CANCELLED:
                 this.cancelledDate = LocalDateTime.now();
                 break;
+            default:
+                break;
         }
-    }
-
-    // Define OrderStatus enum
-    public enum OrderStatus {
-        PENDING,         // Order created but not yet processed
-        PROCESSING,      // Order confirmed and being prepared
-        IN_TRANSIT,      // Order has been shipped and is on the way
-        DELIVERED,       // Order has been delivered to the customer
-        CANCELLED        // Order has been cancelled
     }
 } 

@@ -1,0 +1,23 @@
+CREATE TABLE orders (
+    id BIGSERIAL PRIMARY KEY,
+    order_number VARCHAR(255) NOT NULL UNIQUE,
+    user_id BIGINT NOT NULL,
+    status VARCHAR(50) NOT NULL,
+    subtotal DECIMAL(10, 2) NOT NULL,
+    tax DECIMAL(10, 2) NOT NULL,
+    shipping_cost DECIMAL(10, 2) NOT NULL,
+    discount DECIMAL(10, 2) DEFAULT 0,
+    total DECIMAL(10, 2) NOT NULL,
+    notes TEXT,
+    delivery_instructions TEXT,
+    order_date TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    last_updated TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    processed_date TIMESTAMP,
+    shipped_date TIMESTAMP,
+    delivered_date TIMESTAMP,
+    cancelled_date TIMESTAMP,
+    delivery_partner_id BIGINT,
+    is_paid BOOLEAN DEFAULT FALSE,
+    FOREIGN KEY (user_id) REFERENCES users(id),
+    FOREIGN KEY (delivery_partner_id) REFERENCES users(id)
+);

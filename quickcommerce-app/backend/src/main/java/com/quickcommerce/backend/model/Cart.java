@@ -67,4 +67,14 @@ public class Cart {
         items.remove(item);
         item.setCart(null);
     }
+
+    @Override
+    public String toString() {
+        return "Cart{" +
+               "id=" + id +
+               ", userId=" + user.getId() +
+               ", sessionId='" + sessionId + '\'' +
+               ", itemCount=" + (items != null ? items.size() : 0) +
+               '}';
+    }
 } 

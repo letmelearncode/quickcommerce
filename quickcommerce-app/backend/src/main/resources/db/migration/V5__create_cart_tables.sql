@@ -1,5 +1,5 @@
 -- Create cart table
-CREATE TABLE carts (
+CREATE TABLE IF NOT EXISTS carts (
     id BIGSERIAL PRIMARY KEY,
     user_id BIGINT REFERENCES users(id) ON DELETE CASCADE,
     session_id VARCHAR(128),
@@ -9,11 +9,11 @@ CREATE TABLE carts (
 );
 
 -- Add index for faster lookups by user and session
-CREATE INDEX idx_carts_user_id ON carts(user_id);
-CREATE INDEX idx_carts_session_id ON carts(session_id);
+CREATE INDEX IF NOT EXISTS idx_carts_user_id ON carts(user_id);
+CREATE INDEX IF NOT EXISTS idx_carts_session_id ON carts(session_id);
 
 -- Create cart items table
-CREATE TABLE cart_items (
+CREATE TABLE IF NOT EXISTS cart_items (
     id BIGSERIAL PRIMARY KEY,
     cart_id BIGINT NOT NULL REFERENCES carts(id) ON DELETE CASCADE,
     product_id BIGINT NOT NULL REFERENCES products(id) ON DELETE CASCADE,
@@ -24,9 +24,9 @@ CREATE TABLE cart_items (
 );
 
 -- Add indexes for faster lookups and constraint for unique product per cart
-CREATE INDEX idx_cart_items_cart_id ON cart_items(cart_id);
-CREATE INDEX idx_cart_items_product_id ON cart_items(product_id);
-CREATE UNIQUE INDEX idx_cart_item_unique ON cart_items(cart_id, product_id);
+CREATE INDEX IF NOT EXISTS idx_cart_items_cart_id ON cart_items(cart_id);
+CREATE INDEX IF NOT EXISTS idx_cart_items_product_id ON cart_items(product_id);
+CREATE UNIQUE INDEX IF NOT EXISTS idx_cart_item_unique ON cart_items(cart_id, product_id);
 
 -- Add a trigger to update the updated_at timestamp whenever a cart is modified
 CREATE OR REPLACE FUNCTION update_modified_column()
@@ -37,12 +37,12 @@ BEGIN
 END;
 $$ LANGUAGE plpgsql;
 
-CREATE TRIGGER update_cart_modtime
+CREATE TRIGGER  update_cart_modtime
 BEFORE UPDATE ON carts
 FOR EACH ROW
 EXECUTE FUNCTION update_modified_column();
 
-CREATE TRIGGER update_cart_item_modtime
+CREATE TRIGGER  update_cart_item_modtime
 BEFORE UPDATE ON cart_items
 FOR EACH ROW
 EXECUTE FUNCTION update_modified_column(); 

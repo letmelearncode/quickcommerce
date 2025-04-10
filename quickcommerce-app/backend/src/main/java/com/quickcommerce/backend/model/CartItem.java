@@ -47,4 +47,14 @@ public class CartItem {
     public BigDecimal getSubtotal() {
         return price.multiply(BigDecimal.valueOf(quantity));
     }
+
+    @Override
+    public String toString() {
+        return "CartItem{" +
+               "id=" + id +
+               ", productId=" + (product != null ? product.getId() : null) +
+               ", quantity=" + quantity +
+               ", cartId=" + (cart != null ? cart.getId() : null) +
+               '}';
+    }
 } 

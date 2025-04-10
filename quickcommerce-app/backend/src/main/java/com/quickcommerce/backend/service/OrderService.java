@@ -2,6 +2,7 @@ package com.quickcommerce.backend.service;
 
 import com.quickcommerce.backend.dto.CreateOrderRequest;
 import com.quickcommerce.backend.dto.OrderDTO;
+import com.quickcommerce.backend.dto.CartDTO;
 import com.quickcommerce.backend.model.Order.OrderStatus;
 import com.quickcommerce.backend.model.User;
 import org.springframework.data.domain.Page;
@@ -79,7 +80,7 @@ public interface OrderService {
      * @param orderId the order ID to reorder
      * @return the cart DTO with items from the original order
      */
-    Object reorder(User user, Long orderId);
+    CartDTO reorder(User user, Long orderId);
     
     /**
      * Update order status

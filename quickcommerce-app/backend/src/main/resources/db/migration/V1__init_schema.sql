@@ -6,7 +6,7 @@
 -- DROP TABLE IF EXISTS users CASCADE;
 
 -- Users Table
-CREATE TABLE users (
+CREATE TABLE IF NOT EXISTS users (
     id BIGSERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
     email VARCHAR(100) NOT NULL UNIQUE,
@@ -16,14 +16,14 @@ CREATE TABLE users (
 );
 
 -- Categories Table
-CREATE TABLE categories (
+CREATE TABLE IF NOT EXISTS categories (
     id BIGSERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL UNIQUE,
     description VARCHAR(255)
 );
 
 -- Products Table
-CREATE TABLE products (
+CREATE TABLE IF NOT EXISTS products (
     id BIGSERIAL PRIMARY KEY,
     name VARCHAR(200) NOT NULL,
     description TEXT,
@@ -37,5 +37,5 @@ CREATE TABLE products (
 );
 
 -- Add indexes for performance (optional but recommended)
-CREATE INDEX idx_products_category_id ON products(category_id);
-CREATE INDEX idx_products_active ON products(active); 
+CREATE INDEX IF NOT EXISTS idx_products_category_id ON products(category_id);
+CREATE INDEX IF NOT EXISTS idx_products_active ON products(active); 

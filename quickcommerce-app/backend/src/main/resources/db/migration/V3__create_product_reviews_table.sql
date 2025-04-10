@@ -1,6 +1,6 @@
 -- Schema for Product Reviews
 -- DROP TABLE IF EXISTS product_reviews CASCADE;
-CREATE TABLE product_reviews (
+CREATE TABLE IF NOT EXISTS product_reviews (
     id BIGSERIAL PRIMARY KEY,
     rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5),
     comment TEXT,
@@ -14,4 +14,4 @@ CREATE TABLE product_reviews (
 );
 
 -- Optional: Add an index for faster lookup of reviews by product
-CREATE INDEX idx_product_reviews_product_id ON product_reviews(product_id); 
+CREATE INDEX IF NOT EXISTS idx_product_reviews_product_id ON product_reviews(product_id); 
