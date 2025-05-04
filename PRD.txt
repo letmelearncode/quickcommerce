@@ -45,7 +45,7 @@ This document outlines the requirements for the QuickCommerce Delivery App, a **
     *   Address validation/suggestion using mapping services.
 *   **Checkout & Payment:**
     *   Order summary review (items, address, total cost including delivery fee & taxes).
-    *   Secure payment integration (Stripe, Braintree, PayPal, Apple Pay, Google Pay).
+    *   Secure payment integration (Razorpay, UPI, Net Banking, Cards).
     *   Add/Save payment methods.
     *   Apply promo codes/discounts.
     *   Order confirmation screen.
@@ -231,7 +231,7 @@ This document outlines the requirements for the QuickCommerce Delivery App, a **
 *   **Backend:** **Node.js** with **Express.js**
 *   **Database:** **PostgreSQL** (with **PostGIS** extension for location data)
 *   **Mapping & Geolocation:** **Google Maps Platform (specifically Google Maps JavaScript API)**
-*   **Payment Gateway:** **Stripe**
+*   **Payment Gateway:** **Razorpay**
 *   **Web Push Notifications:** **Firebase Cloud Messaging (FCM) for Web**
 *   **Email Notifications:** **SendGrid**
 *   **Cloud Hosting:** **AWS / Google Cloud / Microsoft Azure** (Specific services TBD)

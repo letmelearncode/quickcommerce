@@ -23,4 +23,8 @@ public class PaymentMethodDTO {
     private String expiryYear;
     
     private String paymentMethodId;
+    
+    private String upiId;
+    
+    private String bankName;
 } 

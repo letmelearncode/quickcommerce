@@ -1,7 +1,6 @@
 package com.quickcommerce.backend.controller;
 
 import com.quickcommerce.backend.dto.ProductDTO;
-import com.quickcommerce.backend.model.Product;
 import com.quickcommerce.backend.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;

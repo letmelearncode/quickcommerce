@@ -16,6 +16,7 @@ import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/api/orders")
@@ -32,10 +33,17 @@ public class OrderController {
     public ResponseEntity<OrderDTO> createOrder(
             @CurrentUser User user,
             @Valid @RequestBody CreateOrderRequest request) {
-        
-        log.info("Creating order for user: {}", user.getEmail());
-        OrderDTO order = orderService.createOrder(user, request);
-        return ResponseEntity.ok(order);
+        String reqId = UUID.randomUUID().toString();
+        log.info("[{}] [INFO] Creating order for user: {}", reqId, user.getEmail());
+        log.debug("[{}] [DEBUG] CreateOrderRequest: {}", reqId, request);
+        try {
+            OrderDTO order = orderService.createOrder(user, request);
+            log.info("[{}] [INFO] Order created successfully: orderId={}", reqId, order.getId());
+            return ResponseEntity.ok(order);
+        } catch (Exception e) {
+            log.error("[{}] [ERROR] Failed to create order: {}", reqId, e.getMessage(), e);
+            throw e;
+        }
     }
     
     /**
@@ -46,17 +54,21 @@ public class OrderController {
             @CurrentUser User user,
             @RequestParam(required = false) OrderStatus status,
             @PageableDefault(size = 10) Pageable pageable) {
-        
-        log.info("Fetching orders for user: {}, status: {}", user.getEmail(), status);
-        
-        Page<OrderDTO> orders;
-        if (status != null) {
-            orders = orderService.getUserOrdersByStatus(user, status, pageable);
-        } else {
-            orders = orderService.getUserOrders(user, pageable);
+        String reqId = UUID.randomUUID().toString();
+        log.info("[{}] [INFO] Fetching orders for user: {}, status: {}", reqId, user.getEmail(), status);
+        try {
+            Page<OrderDTO> orders;
+            if (status != null) {
+                orders = orderService.getUserOrdersByStatus(user, status, pageable);
+            } else {
+                orders = orderService.getUserOrders(user, pageable);
+            }
+            log.info("[{}] [INFO] Orders fetched: count={}", reqId, orders.getTotalElements());
+            return ResponseEntity.ok(orders);
+        } catch (Exception e) {
+            log.error("[{}] [ERROR] Failed to fetch user orders: {}", reqId, e.getMessage(), e);
+            throw e;
         }
-        
-        return ResponseEntity.ok(orders);
     }
     
     /**
@@ -66,10 +78,16 @@ public class OrderController {
     public ResponseEntity<OrderDTO> getOrderById(
             @CurrentUser User user,
             @PathVariable Long orderId) {
-        
-        log.info("Fetching order details for user: {}, orderId: {}", user.getEmail(), orderId);
-        OrderDTO order = orderService.getOrderById(user, orderId);
-        return ResponseEntity.ok(order);
+        String reqId = UUID.randomUUID().toString();
+        log.info("[{}] [INFO] Fetching order details for user: {}, orderId: {}", reqId, user.getEmail(), orderId);
+        try {
+            OrderDTO order = orderService.getOrderById(user, orderId);
+            log.info("[{}] [INFO] Order details fetched for orderId={}", reqId, orderId);
+            return ResponseEntity.ok(order);
+        } catch (Exception e) {
+            log.error("[{}] [ERROR] Failed to fetch order details for orderId={}: {}", reqId, orderId, e.getMessage(), e);
+            throw e;
+        }
     }
     
     /**
@@ -79,10 +97,16 @@ public class OrderController {
     public ResponseEntity<OrderDTO> cancelOrder(
             @CurrentUser User user,
             @PathVariable Long orderId) {
-        
-        log.info("Cancelling order for user: {}, orderId: {}", user.getEmail(), orderId);
-        OrderDTO order = orderService.cancelOrder(user, orderId);
-        return ResponseEntity.ok(order);
+        String reqId = UUID.randomUUID().toString();
+        log.info("[{}] [INFO] Cancelling order for user: {}, orderId: {}", reqId, user.getEmail(), orderId);
+        try {
+            OrderDTO order = orderService.cancelOrder(user, orderId);
+            log.info("[{}] [INFO] Order cancelled: orderId={}", reqId, orderId);
+            return ResponseEntity.ok(order);
+        } catch (Exception e) {
+            log.error("[{}] [ERROR] Failed to cancel orderId={}: {}", reqId, orderId, e.getMessage(), e);
+            throw e;
+        }
     }
     
     /**
@@ -92,10 +116,16 @@ public class OrderController {
     public ResponseEntity<OrderDTO> trackOrder(
             @CurrentUser User user,
             @PathVariable Long orderId) {
-        
-        log.info("Tracking order for user: {}, orderId: {}", user.getEmail(), orderId);
-        OrderDTO order = orderService.trackOrder(user, orderId);
-        return ResponseEntity.ok(order);
+        String reqId = UUID.randomUUID().toString();
+        log.info("[{}] [INFO] Tracking order for user: {}, orderId: {}", reqId, user.getEmail(), orderId);
+        try {
+            OrderDTO order = orderService.trackOrder(user, orderId);
+            log.info("[{}] [INFO] Order tracking fetched for orderId={}", reqId, orderId);
+            return ResponseEntity.ok(order);
+        } catch (Exception e) {
+            log.error("[{}] [ERROR] Failed to track orderId={}: {}", reqId, orderId, e.getMessage(), e);
+            throw e;
+        }
     }
     
     /**
@@ -105,10 +135,16 @@ public class OrderController {
     public ResponseEntity<CartDTO> reorder(
             @CurrentUser User user,
             @PathVariable Long orderId) {
-        
-        log.info("Reordering for user: {}, orderId: {}", user.getEmail(), orderId);
-        CartDTO cart = orderService.reorder(user, orderId);
-        return ResponseEntity.ok(cart);
+        String reqId = UUID.randomUUID().toString();
+        log.info("[{}] [INFO] Reordering for user: {}, orderId: {}", reqId, user.getEmail(), orderId);
+        try {
+            CartDTO cart = orderService.reorder(user, orderId);
+            log.info("[{}] [INFO] Reorder successful for orderId={}", reqId, orderId);
+            return ResponseEntity.ok(cart);
+        } catch (Exception e) {
+            log.error("[{}] [ERROR] Failed to reorder orderId={}: {}", reqId, orderId, e.getMessage(), e);
+            throw e;
+        }
     }
     
     // Admin-only endpoints
@@ -121,17 +157,21 @@ public class OrderController {
     public ResponseEntity<Page<OrderDTO>> getAllOrders(
             @RequestParam(required = false) OrderStatus status,
             @PageableDefault(size = 10) Pageable pageable) {
-        
-        log.info("Admin fetching all orders, status: {}", status);
-        
-        Page<OrderDTO> orders;
-        if (status != null) {
-            orders = orderService.getOrdersByStatus(status, pageable);
-        } else {
-            orders = orderService.getAllOrders(pageable);
+        String reqId = UUID.randomUUID().toString();
+        log.info("[{}] [INFO] Admin fetching all orders, status: {}", reqId, status);
+        try {
+            Page<OrderDTO> orders;
+            if (status != null) {
+                orders = orderService.getOrdersByStatus(status, pageable);
+            } else {
+                orders = orderService.getAllOrders(pageable);
+            }
+            log.info("[{}] [INFO] Admin fetched orders: count={}", reqId, orders.getTotalElements());
+            return ResponseEntity.ok(orders);
+        } catch (Exception e) {
+            log.error("[{}] [ERROR] Admin failed to fetch orders: {}", reqId, e.getMessage(), e);
+            throw e;
         }
-        
-        return ResponseEntity.ok(orders);
     }
     
     /**
@@ -142,10 +182,16 @@ public class OrderController {
     public ResponseEntity<OrderDTO> updateOrderStatus(
             @PathVariable Long orderId,
             @RequestParam OrderStatus status) {
-        
-        log.info("Admin updating order status, orderId: {}, status: {}", orderId, status);
-        OrderDTO order = orderService.updateOrderStatus(orderId, status);
-        return ResponseEntity.ok(order);
+        String reqId = UUID.randomUUID().toString();
+        log.info("[{}] [INFO] Admin updating order status, orderId: {}, status: {}", reqId, orderId, status);
+        try {
+            OrderDTO order = orderService.updateOrderStatus(orderId, status);
+            log.info("[{}] [INFO] Admin updated order status for orderId={}", reqId, orderId);
+            return ResponseEntity.ok(order);
+        } catch (Exception e) {
+            log.error("[{}] [ERROR] Admin failed to update order status for orderId={}: {}", reqId, orderId, e.getMessage(), e);
+            throw e;
+        }
     }
     
     /**
@@ -156,9 +202,15 @@ public class OrderController {
     public ResponseEntity<OrderDTO> assignDeliveryPartner(
             @PathVariable Long orderId,
             @RequestParam Long deliveryPartnerId) {
-        
-        log.info("Admin assigning delivery partner, orderId: {}, partnerId: {}", orderId, deliveryPartnerId);
-        OrderDTO order = orderService.assignDeliveryPartner(orderId, deliveryPartnerId);
-        return ResponseEntity.ok(order);
+        String reqId = UUID.randomUUID().toString();
+        log.info("[{}] [INFO] Admin assigning delivery partner, orderId: {}, partnerId: {}", reqId, orderId, deliveryPartnerId);
+        try {
+            OrderDTO order = orderService.assignDeliveryPartner(orderId, deliveryPartnerId);
+            log.info("[{}] [INFO] Admin assigned delivery partner for orderId={}", reqId, orderId);
+            return ResponseEntity.ok(order);
+        } catch (Exception e) {
+            log.error("[{}] [ERROR] Admin failed to assign delivery partner for orderId={}: {}", reqId, orderId, e.getMessage(), e);
+            throw e;
+        }
     }
 } 

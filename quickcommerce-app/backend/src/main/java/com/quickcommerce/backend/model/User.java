@@ -7,6 +7,8 @@ import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "users", uniqueConstraints = {
@@ -29,9 +31,14 @@ public class User {
     @Column(nullable = false)
     private String password; // Store hashed password
 
-    // We can add roles later if needed
-    // @Enumerated(EnumType.STRING)
-    // private UserRole role;
+    @Column(name = "phone")
+    private String phone;
+
+    // User roles for authorization
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "user_roles", joinColumns = @JoinColumn(name = "user_id"))
+    @Column(name = "role")
+    private Set<String> roles = new HashSet<>();
 
     @CreationTimestamp
     @Column(name = "created_at", nullable = false, updatable = false)
@@ -46,5 +53,15 @@ public class User {
         this.name = name;
         this.email = email;
         this.password = password;
+    }
+
+    // Add role
+    public void addRole(String role) {
+        this.roles.add(role);
+    }
+
+    // Has role
+    public boolean hasRole(String role) {
+        return this.roles.contains(role);
     }
 } 

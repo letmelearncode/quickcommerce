@@ -58,6 +58,7 @@ public class OrderServiceImpl implements OrderService {
         
         // 3. Set addresses
         Address shippingAddress = mapAddressDTOToAddress(request.getShippingAddress());
+        shippingAddress.setUser(user);
         shippingAddress = addressRepository.save(shippingAddress);
         order.setShippingAddress(shippingAddress);
         
